@@ -1,4 +1,3 @@
-
 <ul id="locale" class="dropdown-content">
     <li><a href="/locale/pt-br">Português</a></li>
     <li><a href="/locale/en">English</a></li>

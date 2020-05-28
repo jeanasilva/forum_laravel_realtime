@@ -6,10 +6,15 @@
 
 
 window.Vue = require('vue');
+import VueResource from 'vue-resource';
+Vue.use(VueResource)
+window.axios = require('axios');
 
 import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
+
+ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
 
@@ -23,8 +28,8 @@ Vue.component('threads', require('./components/Threads.vue').default);
 
 const app = new Vue({
     el: '#app',
-    data: {
-       message: 'VueJs'
-    }
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
 });
 

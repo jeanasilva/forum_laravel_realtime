@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,17 @@ Route::get('/locale/{locale}', function ($locale) {
     session(['locale' => $locale]);
     return back();
 });
+
+Route::middleware(['auth'])
+    ->group(function (){
+        Route::get('/threads','ThreadController@index');
+        Route::post('/threads','ThreadController@store');
+        Route::put('/threads/{thread}','ThreadController@update');
+        Route::get('/threads/{thread}/edit',function (\App\Thread $thread) {
+            return view('threads.edit', compact('thread'));
+        });
+    });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

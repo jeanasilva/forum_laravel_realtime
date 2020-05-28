@@ -11723,7 +11723,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /*!*******************************************!*\
   !*** multi ./resources/js/replies/app.js ***!
   \*******************************************/
@@ -11735,4 +11735,4 @@ module.exports = __webpack_require__(/*! C:\laragon\www\Cursos\Forum - Laravel -
 
 /***/ })
 
-},[[2,"/js/manifest","/js/vendor"]]]);
+},[[3,"/js/manifest","/js/vendor"]]]);

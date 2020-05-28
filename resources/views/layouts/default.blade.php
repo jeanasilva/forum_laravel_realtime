@@ -18,6 +18,10 @@
     <main>
         <section id="app">
             @yield('content')
+            {{-- @verbatim
+
+            @endverbatim --}}
+
         </section>
     </main>
 
