@@ -13,7 +13,7 @@
         </div>
         <div class="card-action">
 
-            @if (\Auth::user()->can('update',$result))
+            @if (\Auth::user() and \Auth::user()->can('update',$result))
                 <a href="/threads/{{ $result->id }}/edit">{{ __('Edit') }}</a>
             @endif
 
@@ -26,11 +26,13 @@
         reply="{{ __('Reply') }}"
         your-answer="{{ __('Your Answer') }}"
         send="{{ __('Send') }}"
+        thread-id="{{ $result->id }}"
+        {{-- body="{{ __('Body') }}" --}}
     >
         @include('layouts.default.preloader')
     </replies>
 
 </div>
 
-<script src="/js/replies.js"></script>
+<script type="application/javascript"  src="/js/replies.js"></script>
 @endsection

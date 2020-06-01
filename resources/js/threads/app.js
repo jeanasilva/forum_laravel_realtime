@@ -14,7 +14,21 @@ import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
 
- window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+import Echo from 'laravel-echo';
+
+window.Pusher = require('pusher-js');
+
+Pusher.logToConsole = true;
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: '35d6a77d98dbaf7b5f97',
+    cluster: 'us2',
+    useTLS: true,
+    namespace: 'App\Events\NewThread'
+});
 
 
 
