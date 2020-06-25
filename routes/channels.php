@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-// Broadcast::channel('App.User.{user_Id}', function ($user, $id) {
-//     return (int) $user->id === (int) $id;
-// });
+Broadcast::channel('App.User.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
 
 
-Broadcast::channel('new.thread', function(){
+Broadcast::channel('new.thread', function ($user, $id){
 
     return true;
 

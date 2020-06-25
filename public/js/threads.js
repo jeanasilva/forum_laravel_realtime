@@ -1867,11 +1867,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['title', 'threads', 'replies', 'date', 'options', 'open', 'newThread', 'threadTitle', 'threadBody', 'send'],
   data: function data() {
     return {
       threads_response: [],
+      logged: window.user || {},
       threads_to_save: {
         title: '',
         body: ''
@@ -1895,11 +1899,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    var _this3 = this;
+
     this.getThreads();
-    Echo.channel('new.thread').listen('NewThread', function (data) {
-      console.log(data); // if (e.thread) {
-      //     this.threads_reponse.data.splice(0, 0, e.thread)
-      // }
+    Echo.channel('new.thread').listen('NewThread', function (e) {
+      console.log(e);
+
+      if (e.thread) {
+        _this3.threads_response.data.splice(0, 0, e.thread);
+      }
     });
   }
 });
@@ -19319,19 +19327,50 @@ var render = function() {
         _c(
           "tbody",
           _vm._l(_vm.threads_response.data, function(thread) {
-            return _c("tr", [
+            return _c("tr", { class: { "blue lighten-4": thread.fixed } }, [
               _c("td", [_vm._v(_vm._s(thread.id))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(thread.title))]),
               _vm._v(" "),
-              _c("td", [_vm._v("0")]),
+              _c("td", [_vm._v(_vm._s(thread.replies_count || 0))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(thread.created_at))]),
               _vm._v(" "),
               _c("td", [
-                _c("a", { attrs: { href: "/threads/" + thread.id } }, [
-                  _vm._v(_vm._s(_vm.open))
-                ])
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn",
+                    attrs: { href: "/threads/" + thread.id }
+                  },
+                  [_vm._v(_vm._s(_vm.open))]
+                ),
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(_vm.logged) +
+                    "\n                        "
+                ),
+                _vm.logged.role === "admin"
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "btn",
+                        attrs: { href: "/thread/pin/" + thread.id }
+                      },
+                      [_vm._v("Fixar")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.logged.role === "admin"
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "btn",
+                        attrs: { href: "/thread/close/" + thread.id }
+                      },
+                      [_vm._v("Fechar")]
+                    )
+                  : _vm._e()
               ])
             ])
           }),
@@ -21162,21 +21201,14 @@ window.jQuery = jquery__WEBPACK_IMPORTED_MODULE_1___default.a;
 window.$ = jquery__WEBPACK_IMPORTED_MODULE_1___default.a;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-Pusher.logToConsole = true;
+window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js"); // Pusher.logToConsole = true;
+
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_2__["default"]({
   broadcaster: 'pusher',
   key: '35d6a77d98dbaf7b5f97',
   cluster: 'us2',
-  useTLS: true,
-  namespace: 'App\Events\NewThread'
+  forceTLS: true
 });
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
 Vue.component('threads', __webpack_require__(/*! ./components/Threads.vue */ "./resources/js/threads/components/Threads.vue")["default"]);
 var app = new Vue({
   el: '#app',

@@ -17,6 +17,7 @@
         thread-title="{{ __('Title') }}"
         thread-body="{{ __('Body') }}"
         send="{{ __('Send') }}"
+        {{-- role="{{ $result->role }}" --}}
     >
         @include('layouts.default.preloader')
     </threads>

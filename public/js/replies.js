@@ -1853,12 +1853,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['replied', 'reply', 'yourAnswer', 'send', 'threadId'],
+  props: ['replied', 'reply', 'yourAnswer', 'send', 'threadId', 'isClosed'],
   data: function data() {
     return {
       replies: [],
       thread_id: this.threadId,
+      is_closed: this.isClosed,
       reply_to_save: {
         body: '',
         thread_id: this.threadId
@@ -1882,7 +1895,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    var _this3 = this;
+
     this.getReplies();
+    Echo.channel('new.reply.' + this.thread_id).listen('NewReply', function (e) {
+      console.log(e);
+
+      if (e.reply) {
+        _this3.getReplies();
+      }
+    });
   }
 });
 
@@ -19283,73 +19305,114 @@ var render = function() {
     "div",
     [
       _vm._l(_vm.replies, function(data) {
-        return _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-content" }, [
-            _c("span", { staticClass: "card-title" }, [
-              _vm._v(" " + _vm._s(data.user.name) + " " + _vm._s(_vm.replied))
+        return _c(
+          "div",
+          {
+            staticClass: "card horizontal",
+            class: { "blue-grey lighten-4": data.highlighted }
+          },
+          [
+            _c("div", { staticClass: "card-panel lighten-1 z-depth-1" }, [
+              _c("div", { staticClass: "card-images" }, [
+                _c("img", {
+                  staticClass: "circle responsive-img",
+                  attrs: { src: data.user.photo_url, width: "120" }
+                })
+              ])
             ]),
             _vm._v(" "),
-            _c("blockquote", [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(data.body) +
-                  "\n                "
-              )
+            _c("div", { staticClass: "card-stacked" }, [
+              _c("div", { staticClass: "card-content" }, [
+                _c("span", { staticClass: "card-title" }, [
+                  _vm._v(
+                    " " + _vm._s(data.user.name) + " " + _vm._s(_vm.replied)
+                  )
+                ]),
+                _vm._v(" "),
+                _c("blockquote", [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(data.body) +
+                      "\n                    "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              data.user.role === "admin"
+                ? _c("div", { staticClass: "card-action" }, [
+                    _c(
+                      "a",
+                      { attrs: { href: "/reply/highlight/" + data.id } },
+                      [_vm._v("em destaque")]
+                    )
+                  ])
+                : _vm._e()
             ])
-          ])
-        ])
+          ]
+        )
       }),
       _vm._v(" "),
-      _c("div", { staticClass: "card grey lighten-4" }, [
-        _c("div", { staticClass: "card-content" }, [
-          _c("span", { staticClass: "card-title" }, [
-            _vm._v("\n                " + _vm._s(_vm.reply) + "\n            ")
-          ]),
-          _vm._v(" "),
-          _c(
-            "form",
-            {
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.save()
-                }
-              }
-            },
-            [
-              _c("div", { staticClass: "input-field" }, [
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.reply_to_save.body,
-                      expression: "reply_to_save.body"
-                    }
-                  ],
-                  staticClass: "materialize-textarea",
-                  attrs: { rows: "10", placeholder: _vm.yourAnswer },
-                  domProps: { value: _vm.reply_to_save.body },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.reply_to_save, "body", $event.target.value)
-                    }
-                  }
-                })
+      _vm.is_closed == 0
+        ? _c("div", { staticClass: "card grey lighten-4" }, [
+            _c("div", { staticClass: "card-content" }, [
+              _c("span", { staticClass: "card-title" }, [
+                _vm._v(
+                  "\n                " + _vm._s(_vm.reply) + "\n            "
+                )
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn red accent-2", attrs: { type: "submit" } },
-                [_vm._v(_vm._s(_vm.send))]
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.save()
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "input-field" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reply_to_save.body,
+                          expression: "reply_to_save.body"
+                        }
+                      ],
+                      staticClass: "materialize-textarea",
+                      attrs: { rows: "10", placeholder: _vm.yourAnswer },
+                      domProps: { value: _vm.reply_to_save.body },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.reply_to_save,
+                            "body",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn red accent-2",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v(_vm._s(_vm.send))]
+                  )
+                ]
               )
-            ]
-          )
-        ])
-      ])
+            ])
+          ])
+        : _vm._e()
     ],
     2
   )
@@ -21103,26 +21166,19 @@ window.jQuery = jquery__WEBPACK_IMPORTED_MODULE_1___default.a;
 window.$ = jquery__WEBPACK_IMPORTED_MODULE_1___default.a;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-Pusher.logToConsole = true;
+window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js"); // Pusher.logToConsole = true;
+
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_2__["default"]({
   broadcaster: 'pusher',
   key: '35d6a77d98dbaf7b5f97',
   cluster: 'us2',
-  useTLS: true,
-  namespace: 'App\Events\NewThread'
+  forceTLS: true
 });
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
 Vue.component('replies', __webpack_require__(/*! ./components/Replies.vue */ "./resources/js/replies/components/Replies.vue")["default"]);
 var app = new Vue({
   el: '#app',
-  data: {
-    message: 'Vuejs - Carregando...'
+  headers: {
+    'X-CSRF-TOKEN': jquery__WEBPACK_IMPORTED_MODULE_1___default()('meta[name="csrf-token"]').attr('content')
   }
 });
 

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Reply;
+use App\Observers\ReplyObserver;
+use App\User;
+use App\Observers\PhotoUserObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,5 +28,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         setlocale(LC_TIME, 'pt-br');
+
+        Reply::observe(ReplyObserver::class);
+        User::observe(PhotoUserObserver::class);
+
     }
 }

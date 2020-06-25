@@ -23,14 +23,9 @@ class NewThread implements ShouldBroadcast
 
     }
 
-
     public function broadcastOn()
     {
-        return ['new.thread'];
+        return new Channel('new.thread');
     }
 
-    public function broadcastAs()
-    {
-        return 'NewThread';
-    }
 }

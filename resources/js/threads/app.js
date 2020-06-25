@@ -20,23 +20,15 @@ import Echo from 'laravel-echo';
 
 window.Pusher = require('pusher-js');
 
-Pusher.logToConsole = true;
+// Pusher.logToConsole = true;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '35d6a77d98dbaf7b5f97',
     cluster: 'us2',
-    useTLS: true,
-    namespace: 'App\Events\NewThread'
+    forceTLS: true
 });
 
-
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 Vue.component('threads', require('./components/Threads.vue').default);
 

@@ -18,12 +18,12 @@
     <main>
         <section id="app">
             @yield('content')
-            {{-- @verbatim
-
-            @endverbatim --}}
-
         </section>
     </main>
+
+    <div id="loader">
+        <loader/>
+    </div>
 
     @include('layouts.default.footer')
 
